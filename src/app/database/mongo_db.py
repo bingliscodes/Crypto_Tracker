@@ -7,6 +7,8 @@ class MongoDBConnection(metaclass=SingletonMeta):
         self._connection = MongoClient(uri)
 
     def get_connection(self):
+        if self._connection is None:
+            raise ConnectionError("MongoDB Connection has been closed.")
         return self._connection
 
     def close_connection(self):
