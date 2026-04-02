@@ -4,8 +4,10 @@ import os
 
 load_dotenv()
 from src.app.database.mongo_db import MongoDBConnection
+from src.app.database.postgres_db import PostgresConnection
 
-mongo_connection = MongoDBConnection(os.getenv("MONGO_DB_URI"))
+mongo = MongoDBConnection(os.getenv("MONGO_URI"))
+postgres = PostgresConnection(os.getenv("POSTGRES_URI"))
 
 app = FastAPI()
 

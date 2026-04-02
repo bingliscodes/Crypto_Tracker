@@ -1,12 +1,6 @@
-from dotenv import load_dotenv
-import os
 import psycopg2
 
 from src.app.utils.singleton import SingletonMeta
-
-load_dotenv()
-
-db_url = f"postgresql://{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASSWORD")}@localhost:5432/{os.getenv("DB_NAME")}"
 
 
 class PostgresConnection(metaclass=SingletonMeta):
