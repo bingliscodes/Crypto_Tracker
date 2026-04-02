@@ -1,0 +1,2 @@
+[tool.fastpi]
+entrypoint = "app.main:app"
