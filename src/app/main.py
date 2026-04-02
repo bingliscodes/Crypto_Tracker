@@ -46,8 +46,8 @@ class PriceService:
 
 app_interface = PriceService()
 app_interface.set_fetch_strategy(CoinMarketCapStrategy())
-app_interface.set_storage_strategy(MongoDBStorage())
-print(app_interface.get_latest("btc"))
+app_interface.set_storage_strategy(PostgresStorage())
+print("Getting latest btc...", app_interface.get_latest("btc"))
 
 app = FastAPI()
 

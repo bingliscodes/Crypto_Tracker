@@ -23,6 +23,7 @@ class StorageStrategy(ABC):
         pass
 
 
+# Need to clean it to only include relevant info
 # --- Concrete Strategies ---
 class MongoDBStorage(StorageStrategy):
     def save(self, data: list[dict]):
@@ -38,7 +39,14 @@ class MongoDBStorage(StorageStrategy):
         res = db["crypto_prices"].find_one(
             {"symbol": symbol}, sort={"timestamp": pymongo.DESCENDING}
         )
-        return res
+        res_dict = {
+            "name": res["name"],
+            "symbol": res["symbol"],
+            "price": res["price"],
+            "currency": res["currency"],
+            "timestamp": res["timestamp"],
+        }
+        return res_dict
 
 
 class PostgresStorage(StorageStrategy):
@@ -56,7 +64,15 @@ class PostgresStorage(StorageStrategy):
                 .order_by(desc(CryptoPrice.timestamp))
                 .limit(1)
             )
-            return session.execute(stmt).scalars().first()
+            res = session.execute(stmt).scalars().first()
+            res_dict = {
+                "name": res.name,
+                "symbol": res.symbol,
+                "price": res.price,
+                "currency": res.currency,
+                "timestamp": res.timestamp,
+            }
+            return res_dict
 
 
 # --- Context ---
