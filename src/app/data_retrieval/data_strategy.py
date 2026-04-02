@@ -62,19 +62,3 @@ class MockStrategy(FetchStrategy):
                 "currency": "USD",
             },
         )
-
-
-# I think we can just use one context for everything?
-# --- Context ---
-class CryptoDataFetcher:
-    def __init__(self):
-        self._crypto_source_strategy: FetchStrategy | None = None
-
-    def set_strategy(self, strategy: FetchStrategy):
-        self._crypto_source_strategy = strategy
-
-    def get_price(self, symbol: str) -> dict:
-        if self._crypto_source_strategy is None:
-            return "Please set a strategy before retrieving data!"
-
-        return self._crypto_source_strategy.fetch_price(symbol)

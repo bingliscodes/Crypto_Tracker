@@ -73,24 +73,3 @@ class PostgresStorage(StorageStrategy):
                 "timestamp": res.timestamp,
             }
             return res_dict
-
-
-# --- Context ---
-class DataStorage:
-    def __init__(self):
-        self._storage_strategy: StorageStrategy | None = None
-
-    def set_storage_strategy(self, strategy: StorageStrategy):
-        self._storage_strategy = strategy
-
-    def save(self, data: list[dict]):
-        if self._storage_strategy is None:
-            return "No storage strategy set!"
-
-        return self._storage_strategy.save(data)
-
-    def get_latest(self, symbol: str) -> dict | None:
-        if self._storage_strategy is None:
-            return "No storage strategy set!"
-
-        return self._storage_strategy.get_latest(symbol)
