@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 import os
 
@@ -19,10 +20,15 @@ def get_coingecko_data() -> list:
             "name": coin["name"],
             "symbol": coin["symbol"],
             "price": coin["current_price"],
+            "timestamp": datetime.now(timezone.utc),
+            "currency": "USD",
         }
         formatted_prices.append(curr_coin)
 
     return formatted_prices
+
+
+# TODO: Implement currency option
 
 
 # --- CoinMarketCap ---
@@ -41,6 +47,8 @@ def get_coinmarketcap_data() -> list:
             "name": coin["name"],
             "symbol": coin["symbol"].lower(),
             "price": coin["quote"]["USD"]["price"],
+            "timestamp": datetime.now(timezone.utc),
+            "currency": "USD",
         }
         formatted_prices.append(curr_coin)
     return formatted_prices
