@@ -6,9 +6,10 @@ import os
 load_dotenv()
 
 
+# TODO: Implement currency option
+
+
 # --- CoinGecko ---
-# api_url = "https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=0x2260fac5e5542a773aa44fbcfedf7c193bc2c599&vs_currencies=usd"
-# Use coins/markets to get all coins with their id, symbol, name, and price
 def get_coingecko_data() -> list:
     api_url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd"
     headers = {"x-cg-pro-api-key": os.getenv("COINGECKO_API_KEY")}
@@ -26,9 +27,6 @@ def get_coingecko_data() -> list:
         formatted_prices.append(curr_coin)
 
     return formatted_prices
-
-
-# TODO: Implement currency option
 
 
 # --- CoinMarketCap ---
@@ -52,8 +50,3 @@ def get_coinmarketcap_data() -> list:
         }
         formatted_prices.append(curr_coin)
     return formatted_prices
-
-
-print(get_coinmarketcap_data())
-
-# Can use /coins/list endpoint to get the symbol and contract addresses for all supported coins

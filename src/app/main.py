@@ -40,11 +40,14 @@ class PriceService:
         data = self._fetch_strategy.fetch_all_prices()
         self._storage_strategy.save(data)
 
+    def get_latest(self, symbol: str) -> dict:
+        return self._storage_strategy.get_latest(symbol)
+
 
 app_interface = PriceService()
 app_interface.set_fetch_strategy(CoinMarketCapStrategy())
 app_interface.set_storage_strategy(MongoDBStorage())
-app_interface.get_prices_and_save()
+print(app_interface.get_latest("btc"))
 
 app = FastAPI()
 

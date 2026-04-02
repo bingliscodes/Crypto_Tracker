@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from abc import ABC, abstractmethod
+import pymongo
 
 from src.app.database.postgres_db import SessionLocal
 from src.app.models.crypto_price import CryptoPrice
@@ -32,7 +33,11 @@ class MongoDBStorage(StorageStrategy):
         )  # Selects the collection called "crypto_prices"
 
     def get_latest(self, symbol: str) -> dict | None:
-        pass
+        db = MongoDBConnection().get_connection()["crypto_db"]
+        res = db["crypto_prices"].find_one(
+            {"symbol": symbol}, sort={"timestamp": pymongo.ASCENDING}
+        )
+        return res
 
 
 class PostgresStorage(StorageStrategy):
