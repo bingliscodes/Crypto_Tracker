@@ -2,3 +2,5 @@
 .env
 **.sh
 **.log
+__pycache__/
+*.pyc
