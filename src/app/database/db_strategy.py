@@ -1,8 +1,5 @@
 from dotenv import load_dotenv
-import os
 from abc import ABC, abstractmethod
-from datetime import datetime, timezone
-from sqlalchemy import insert
 
 from src.app.database.postgres_db import SessionLocal
 from src.app.models.crypto_price import CryptoPrice
@@ -27,7 +24,8 @@ class StorageStrategy(ABC):
 # --- Concrete Strategies ---
 class MongoDBStorage(StorageStrategy):
     def save(self, data: list[dict]):
-        pass
+        db = MongoDBConnection().get_connection()["crypto_db"]
+        db["crypto_prices"].insert_many(data)
 
     def get_latest(self, symbol: str) -> dict | None:
         pass
