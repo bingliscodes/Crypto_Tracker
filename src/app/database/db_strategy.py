@@ -24,8 +24,12 @@ class StorageStrategy(ABC):
 # --- Concrete Strategies ---
 class MongoDBStorage(StorageStrategy):
     def save(self, data: list[dict]):
-        db = MongoDBConnection().get_connection()["crypto_db"]
-        db["crypto_prices"].insert_many(data)
+        db = MongoDBConnection().get_connection()[
+            "crypto_db"
+        ]  # Creates a DB called crypto_db if it doesn't already exist
+        db["crypto_prices"].insert_many(
+            data
+        )  # Selects the collection called "crypto_prices"
 
     def get_latest(self, symbol: str) -> dict | None:
         pass
