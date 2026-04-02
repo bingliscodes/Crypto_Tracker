@@ -2,10 +2,10 @@ from dotenv import load_dotenv
 import os
 from abc import ABC, abstractmethod
 from pydantic import BaseModel
-from psycopg2.extras import execute_values
 from datetime import datetime, timezone
+from sqlalchemy import insert
 
-from .postgres_db import PostgresConnection
+from src.app.database.postgres_db import SessionLocal
 from .mongo_db import MongoDBConnection
 
 load_dotenv()
@@ -45,29 +45,18 @@ class MongoDBStorage(StorageStrategy):
 
 class PostgresStorage(StorageStrategy):
     def save(self, data: PriceData):
-        postgres = PostgresConnection(os.getenv("POSTGRES_URI"))
-        conn = postgres.get_connection()
-        try:
-            values = [
-                (
-                    coin["name"],
-                    coin["symbol"],
-                    coin["price"],
-                    datetime.now(timezone.utc),
-                )
-                for coin in data
-            ]
-            query = (
-                "INSERT INTO crypto_prices (name, symbol, price, timestamp) VALUES %s"
-            )
-            with conn.cursor() as cursor:
-                execute_values(cursor, query, values)
-            conn.commit()
-        finally:
-            postgres._pool.putconn(conn)
+        with SessionLocal() as session:
+            session.execute(insert(CoinData), data)
+            session.commit()
 
     def get_latest(self, symbol: str) -> CoinData | None:
-        pass
+        try:
+            query = f"""SELECT * FROM crypto_prices WHERE symbol = '{symbol}' ORDER BY timestamp ASC """
+            with self._conn.cursor as cursor:
+                row = cursor.execute(query).fetchone()
+                return row
+        finally:
+            self._postgres._pool.putconn(self._conn)
 
 
 # --- Context ---

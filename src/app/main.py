@@ -3,12 +3,14 @@ from dotenv import load_dotenv
 import os
 
 from src.app.database.mongo_db import MongoDBConnection
-from src.app.database.postgres_db import PostgresConnection
+from src.app.database.postgres_db import engine, Base
+import src.app.models.crypto_price
 
 load_dotenv()
 
+Base.metadata.create_all(engine)
 mongo = MongoDBConnection(os.getenv("MONGO_URI"))
-postgres = PostgresConnection(os.getenv("POSTGRES_URI"))
+
 
 app = FastAPI()
 
