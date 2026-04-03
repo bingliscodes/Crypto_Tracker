@@ -1,2 +1,2 @@
 [tool.fastpi]
-entrypoint = "app.main:app"
+entrypoint = "src.app.main:app"

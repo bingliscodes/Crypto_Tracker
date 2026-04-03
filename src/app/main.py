@@ -45,12 +45,13 @@ class PriceService:
 
 
 app_interface = PriceService()
-app_interface.set_fetch_strategy(CoinMarketCapStrategy())
+app_interface.set_fetch_strategy(CoinGeckoStrategy())
 app_interface.set_storage_strategy(PostgresStorage())
 
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+# Simple get endpoint to retrieve the price of a coin by it's symbol
+@app.get("/prices/{symbol}")
+async def get_price(symbol) -> dict:
+    return {"Price": app_interface.get_latest(symbol)}
